@@ -24,7 +24,7 @@ def crawler(courseName):
     cursor.execute(sql)
     db.commit()
     
-    #把課程id找出來
+    #把課程cid找出來
     sql = "select * from course where courseName='%s'" % (courseName)
     cursor.execute(sql)
     cid = cursor.fetchone() 
@@ -79,8 +79,8 @@ def crawler(courseName):
         cursor.execute(sql)
         db.commit()
         
-        #將最新一筆資料的id找出來
-        sql = "select * from article order by id desc limit 0,1"
+        #將最新一筆資料的aid找出來
+        sql = "select * from article order by aid desc limit 0,1"
         cursor.execute(sql)
         aid = cursor.fetchone()
         
