@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Mar 19 16:44:07 2022
-
-@author: User
-"""
-
 import time
 import pymysql
 import requests
