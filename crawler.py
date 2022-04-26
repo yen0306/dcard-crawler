@@ -28,7 +28,7 @@ def crawler(courseName):
     
     #23~29: 控制搜尋引擎
     searchBar = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.NAME, "query"))
+        EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[1]/div/div[1]/div/div/form/input'))
     )
     searchBtn = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/div/div[1]/div/div/form/button')
     
@@ -40,11 +40,12 @@ def crawler(courseName):
         EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div/div/div/div[2]/div/div/div/div[1]/div[2]/article/h2/a'))
     )
     
+    #51~69爬每篇文章的網址
     postsURL = []
     prev_ele = None
     for i in range(1,4):
         time.sleep(1)
-        eles = driver.find_elements_by_class_name('tgn9uw-0')
+        eles = driver.find_elements_by_class_name('sc-d28862ca-0')
         # 若串列中存在上一次的最後一個元素，則擷取上一次的最後一個元素到當前最後一個元素進行爬取
         try:
             eles = eles[(eles.index(prev_ele)+1):]
@@ -52,11 +53,14 @@ def crawler(courseName):
             pass
         for ele in eles:
             try:
-                href = ele.find_element_by_class_name('tgn9uw-3').get_attribute('href')
+                href = ele.find_element_by_class_name('sc-d28862ca-3').get_attribute('href')
                 postsURL.append(href)
             except:
                 pass
-        prev_ele = eles[-1]
+        if len(eles) == 0:
+            pass
+        else:
+            prev_ele = eles[-1]
         js = "window.scrollTo(0, document.body.scrollHeight/4*" + str(i+1) + ");"
         driver.execute_script(js)
     
@@ -65,7 +69,7 @@ def crawler(courseName):
         response = requests.get(i)
         soup = BeautifulSoup(response.text, "html.parser")
         article = soup.find("h1").text
-        contents = soup.find_all("div", class_="phqjxq-0")
+        contents = soup.find_all("div", class_="sc-4dc2ee70-0")
         
         #填入文章標題、內文
         sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], article, contents[0].text)
