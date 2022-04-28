@@ -45,7 +45,7 @@ def crawler(courseName):
     prev_ele = None
     for i in range(1,4):
         time.sleep(1)
-        eles = driver.find_elements_by_class_name('sc-d28862ca-0')
+        eles = driver.find_elements_by_class_name('sc-dc8defdb-0')
         # 若串列中存在上一次的最後一個元素，則擷取上一次的最後一個元素到當前最後一個元素進行爬取
         try:
             eles = eles[(eles.index(prev_ele)+1):]
@@ -53,7 +53,7 @@ def crawler(courseName):
             pass
         for ele in eles:
             try:
-                href = ele.find_element_by_class_name('sc-d28862ca-3').get_attribute('href')
+                href = ele.find_element_by_class_name('sc-dc8defdb-3').get_attribute('href')
                 postsURL.append(href)
             except:
                 pass
@@ -69,7 +69,7 @@ def crawler(courseName):
         response = requests.get(i)
         soup = BeautifulSoup(response.text, "html.parser")
         article = soup.find("h1").text
-        contents = soup.find_all("div", class_="sc-4dc2ee70-0")
+        contents = soup.find_all("div", class_="sc-ebb1bedf-0")
         
         #填入文章標題、內文
         sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], article, contents[0].text)
