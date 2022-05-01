@@ -6,17 +6,16 @@ if (isset($_REQUEST['act'])) {
 } else $act='';
 
 switch($act) {
-    case "getInfo":
+    case "check":
         $courseName = $_POST['courseName'];
         $list = isExist($courseName);
         if ((int)$list['count(*)'] == 0) {
             crawler($courseName);
-            echo "爬取完成";
-            break;
-        } else {
-            echo"已有資料";
-            break;
         }
+        header("Location: showUI.html?n=" . $courseName);
+        break;
+    case "getInfo":
+
     default;
 }
 ?>
