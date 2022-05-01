@@ -1,8 +1,8 @@
 import sys
 import time
+import json
 import pymysql
 import requests
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -55,7 +55,8 @@ def crawler(courseName):
         for ele in eles:
             try:
                 href = ele.find_element_by_class_name('sc-dc8defdb-3').get_attribute('href')
-                postsURL.append(href)
+                numIndex = href.index("p/")
+                postsURL.append(href[numIndex+2:])
             except:
                 pass
         if len(eles) == 0:
@@ -67,13 +68,11 @@ def crawler(courseName):
     
     #爬每篇文章的標題、內文、留言
     for i in postsURL:
-        response = requests.get(i)
-        soup = BeautifulSoup(response.text, "html.parser")
-        article = soup.find("h1").text
-        contents = soup.find_all("div", class_="sc-ebb1bedf-0")
-        
+        articleURL = "https://www.dcard.tw/service/api/v2/posts/" + i
+        response = requests.get(articleURL)
+        data = json.loads(response.text)
         #填入文章標題、內文
-        sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], article, contents[0].text)
+        sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], data['title'], data['content'])
         cursor.execute(sql)
         db.commit()
         
@@ -82,14 +81,18 @@ def crawler(courseName):
         cursor.execute(sql)
         aid = cursor.fetchone()
         
-        #填入該篇文章的所有留言
-        for i in range(1, len(contents)):
-            sql = "insert into comment (aid,comment) values (%d,'%s')" % (aid[0], contents[i].text)
+        commentURL = "https://www.dcard.tw/service/api/v2/posts/" + i + "/comments"
+        res = requests.get(commentURL)
+        comments = json.loads(res.text)
+        for comment in comments:
+            if comment['hiddenByAuthor'] == True:  #如果留言被刪除就跳過
+                continue
+            sql = "insert into comment (aid,floor,comment) values (%d,'%s','%s')" % (aid[0], 'B'+str(comment['floor']), comment['content'])
             cursor.execute(sql)
             db.commit()
-
+        
 def main():
-    courseName = sys.argv[1]  #輸入要查詢的課名
+    courseName = sys.argv[1]  #要查詢的課名
     crawler(courseName)  #執行爬蟲
     db.close()
 
