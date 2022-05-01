@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-05-01 10:17:36
+-- 產生時間： 2022-05-01 18:05:12
 -- 伺服器版本： 10.4.24-MariaDB
 -- PHP 版本： 8.1.4
 
@@ -12,7 +12,7 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
--- 資料庫: `test1`
+-- 資料庫: `test`
 --
 
 -- --------------------------------------------------------
@@ -37,6 +37,7 @@ CREATE TABLE `article` (
 CREATE TABLE `comment` (
   `id` int(4) NOT NULL,
   `aid` int(4) NOT NULL,
+  `floor` varchar(4) NOT NULL,
   `comment` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
