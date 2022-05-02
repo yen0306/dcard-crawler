@@ -8,11 +8,12 @@ if (isset($_REQUEST['act'])) {
 switch($act) {
     case "check":
         $courseName = $_POST['courseName'];
-        $list = isExist($courseName);
-        if ((int)$list['count(*)'] == 0) {
+        $data = isExist($courseName);
+        if ((int)$data['count(*)'] == 0) {
             crawler($courseName);
         }
-        header("Location: showUI.html?n=" . $courseName);
+        $data = getcid($courseName);
+        header("Location: showUI.html?cid=" . $data['cid'] . "&n=" . $courseName);
         break;
     case "getInfo":
 
