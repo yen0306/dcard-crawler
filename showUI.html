@@ -4,11 +4,41 @@
 <meta charset="UTF-8" />
 <meta name="keywords" content=" " />
 <meta name="description" content=" " />
-<title>搜尋</title>
+<title>搜尋結果</title>
 </head>
+
+<script>
+    var main;
+    window.onload =function() {
+        let cid = location.href.split("=")[1][0];
+        let courseName = decodeURI(location.href).split("n=")[1];
+        fetch("control.php?act=getInfo&cid=" + cid)
+        .then(function(resp){
+            console.log(resp);
+            return resp.json();
+        })
+        .then(function(json) {
+            if (json) {
+                let tableStr = "<table><tr><td>";
+                tableStr += "title</td><td>";
+                tableStr += "content</td><td>";
+                tableStr += "floor</td><td>";
+                tableStr += "comment</td></tr>";
+                for (let row of json) {
+                    tableStr += "<tr><td>" + row['title'];
+                    tableStr += "</td><td>" + row['content'];
+                    tableStr += "</td><td>" + row['floor'];
+                    tableStr += "</td><td>" + row['comment'];
+                    tableStr += "</td></tr>";
+                }
+                tableStr += "</table>";
+                document.getElementById("main").innerHTML = tableStr;
+            }
+        })
+    }
+</script>
+
 <body>
-
-哈哈哈
-
+<div id="main"></div>
 </body>
 </html>
