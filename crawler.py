@@ -1,8 +1,8 @@
 import sys
 import time
-import json
 import pymysql
 import requests
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -46,7 +46,7 @@ def crawler(courseName):
     prev_ele = None
     for i in range(1,4):
         time.sleep(1)
-        eles = driver.find_elements_by_class_name('sc-dc8defdb-0')
+        eles = driver.find_elements_by_class_name('sc-fc3be524-0')
         # 若串列中存在上一次的最後一個元素，則擷取上一次的最後一個元素到當前最後一個元素進行爬取
         try:
             eles = eles[(eles.index(prev_ele)+1):]
@@ -54,9 +54,8 @@ def crawler(courseName):
             pass
         for ele in eles:
             try:
-                href = ele.find_element_by_class_name('sc-dc8defdb-3').get_attribute('href')
-                numIndex = href.index("p/")
-                postsURL.append(href[numIndex+2:])
+                href = ele.find_element_by_class_name('sc-fc3be524-3 ').get_attribute('href')
+                postsURL.append(href)
             except:
                 pass
         if len(eles) == 0:
@@ -66,13 +65,18 @@ def crawler(courseName):
         js = "window.scrollTo(0, document.body.scrollHeight/4*" + str(i+1) + ");"
         driver.execute_script(js)
     
+    #ua = UserAgent()
+    #user_agent = ua.random
     #爬每篇文章的標題、內文、留言
     for i in postsURL:
-        articleURL = "https://www.dcard.tw/service/api/v2/posts/" + i
-        response = requests.get(articleURL)
-        data = json.loads(response.text)
+        response = requests.get(i)
+        soup = BeautifulSoup(response.text, "html.parser")
+        article = soup.find("h1").text
+        contents = soup.find_all("div", class_="sc-ebb1bedf-0")
+        floor = soup.find_all("span", class_="sc-5ebd82a8-3")
+
         #填入文章標題、內文
-        sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], data['title'], data['content'])
+        sql = "insert into article (cid,title,content) values (%d,'%s','%s')" % (cid[0], article, contents[0].text)
         cursor.execute(sql)
         db.commit()
         
@@ -81,17 +85,13 @@ def crawler(courseName):
         cursor.execute(sql)
         aid = cursor.fetchone()
         
-        commentURL = "https://www.dcard.tw/service/api/v2/posts/" + i + "/comments"
-        res = requests.get(commentURL)
-        comments = json.loads(res.text)
-        for comment in comments:
-            if comment['hiddenByAuthor'] == True:  #如果留言被刪除就跳過
-                continue
-            sql = "insert into comment (aid,floor,comment) values (%d,'%s','%s')" % (aid[0], 'B'+str(comment['floor']), comment['content'])
+        for i in range(1, len(contents)):
+            sql = "insert into comment (aid,floor,comment) values (%d,'%s','%s')" % (aid[0], floor[i-1].get_text(), contents[i].text)
             cursor.execute(sql)
             db.commit()
-        
+
 def main():
+    # courseName = input()
     courseName = sys.argv[1]  #要查詢的課名
     crawler(courseName)  #執行爬蟲
     db.close()
