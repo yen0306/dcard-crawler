@@ -26,7 +26,7 @@ function crawler($courseName) {  //執行爬蟲程式
 }
 function getInfo($cid) {  //取得文章所有資訊
     global $db;
-    $sql = "select title, content, floor, comment from article, comment where article.cid=? and article.aid=comment.aid";
+    $sql = "select article.aid, title, content, floor, comment from article, comment where article.cid=? and article.aid=comment.aid";
     $stmt = mysqli_prepare($db, $sql);
     mysqli_stmt_bind_param($stmt, "i", $cid);
     mysqli_stmt_execute($stmt);
@@ -34,11 +34,12 @@ function getInfo($cid) {  //取得文章所有資訊
     $retArr=array();
     while ($rs = mysqli_fetch_assoc($result)) {
         $tArr=array();
+        $tArr['aid'] = $rs['aid']
         $tArr['title'] = $rs['title'];
         $tArr['content'] = $rs['content'];
         $tArr['floor'] = $rs['floor'];
         $tArr['comment'] = $rs['comment'];
-        $retArr[] = $tArr;;
+        $retArr[] = $tArr;
     }
     return $retArr;
 }
