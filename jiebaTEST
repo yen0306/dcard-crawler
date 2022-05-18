@@ -12,7 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 #連線資料庫
-db = pymysql.connect(host='localhost', user='root', passwd='tommy031103', db='test')
+db = pymysql.connect(host='localhost', user='root', passwd='', db='test')
 cursor = db.cursor()
 
 def crawler(courseName):
