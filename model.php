@@ -34,7 +34,7 @@ function getInfo($cid) {  //取得文章所有資訊
     $retArr=array();
     while ($rs = mysqli_fetch_assoc($result)) {
         $tArr=array();
-        $tArr['aid'] = $rs['aid']
+        $tArr['aid'] = $rs['aid'];
         $tArr['title'] = $rs['title'];
         $tArr['content'] = $rs['content'];
         $tArr['floor'] = $rs['floor'];
