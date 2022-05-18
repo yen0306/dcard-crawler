@@ -25,7 +25,7 @@ CREATE TABLE `article` (
   `aid` int(4) NOT NULL,
   `cid` int(3) NOT NULL,
   `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `content` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+  `content` varchar(10000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
