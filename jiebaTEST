@@ -93,18 +93,23 @@ def crawler(courseName):
                 sql = "insert into comment (aid,floor,comment) values (%d,'%s','%s')" % (aid[0], floor[i-1].get_text(), contents[i].text)
                 cursor.execute(sql)
                 db.commit()
-
+"""
 def check_keyword(J_tmpArticle, J_tmpContents):
     jieba.load_userdict("WANTdic.txt")
     jieba.load_userdict("NOTdic.txt")
     dataWANT = '加簽 分享 心得 評分 成績'
-    dataNOT = '換課 丟'
+    dataNOT = '換課 丟 交換禮物'
     Jieba_dataWANT = []
     Jieba_dataNOT = []
     Jieba_dataWANT.append((' '.join(jieba.cut(dataWANT, cut_all=False, HMM=True))).split())
     Jieba_dataNOT.append((' '.join(jieba.cut(dataNOT, cut_all=False, HMM=True))).split())
     result = 0
     for i in range(0,len(J_tmpArticle[0])) :    #找標題
+        for j in range(0,len(Jieba_dataNOT[0])):
+            if (J_tmpContents[0][i] == Jieba_dataNOT[0][j] & Jieba_dataNOT[0][j]!=' '):
+                return False
+
+    for i in range(0,len(J_tmpContents[0])) :    #找標題
         for j in range(0,len(Jieba_dataNOT[0])):
             if (J_tmpContents[0][i] == Jieba_dataNOT[0][j] & Jieba_dataNOT[0][j]!=' '):
                 return False
@@ -117,22 +122,43 @@ def check_keyword(J_tmpArticle, J_tmpContents):
         return True
     else:
         return False
-
+"""
 # 查詢的課名 文章標題 文章內文
 def check_article_title(tmpCourseName, tmpArticle, tmpContents):
+    jieba.load_userdict("WANTdic.txt")
+    jieba.load_userdict("NOTdic.txt")
+
     Jieba_tmpArticle = []
     Jieba_tmpCourseName = []
     Jieba_tmpContents = []
-    Jieba_tmpArticle.append((' '.join(jieba.cut(tmpArticle, cut_all=False, HMM=True))).split())
-    Jieba_tmpCourseName.append((' '.join(jieba.cut(tmpCourseName, cut_all=False, HMM=True))).split())
-    Jieba_tmpContents.append((' '.join(jieba.cut(tmpContents, cut_all=False, HMM=True))).split())
+    Jieba_tmpArticle.append((' '.join(jieba.cut(tmpArticle, cut_all=True, HMM=True))).split())
+    Jieba_tmpCourseName.append((' '.join(jieba.cut(tmpCourseName, cut_all=True, HMM=True))).split())
+    Jieba_tmpContents.append((' '.join(jieba.cut(tmpContents, cut_all=True, HMM=True))).split())
+    
+    dataWANT = '加簽 分享 心得 評分 成績'
+    dataNOT = '換課 丟 交換禮物'
+    Jieba_dataWANT = []
+    Jieba_dataNOT = []
+    Jieba_dataWANT.append((' '.join(jieba.cut(dataWANT, cut_all=True, HMM=True))).split())
+    Jieba_dataNOT.append((' '.join(jieba.cut(dataNOT, cut_all=True, HMM=True))).split())
+
     result = 0
-    for i in range(0,len(Jieba_tmpArticle[0])) :
-        for j in range(0,len(Jieba_tmpCourseName[0])):
-            if (Jieba_tmpArticle[0][i] == Jieba_tmpCourseName[0][j]):
+    for i in range(0,len(Jieba_tmpArticle[0])) :    #找標題
+        for j in range(0,len(Jieba_dataNOT[0])):
+            if (Jieba_tmpArticle[0][i] == Jieba_dataNOT[0][j] & Jieba_dataNOT[0][j]!=' '):
+                return False
+
+    for i in range(0,len(Jieba_tmpArticle[0])) :    #找標題
+        for j in range(0,len(Jieba_dataNOT[0])):
+            if (Jieba_tmpArticle[0][i] == Jieba_dataNOT[0][j] & Jieba_dataNOT[0][j]!=' '):
+                return False
+
+    for i in range(0,len(Jieba_tmpContents[0])) :    #找內文
+        for j in range(0,len(Jieba_dataWANT[0])):
+            if (Jieba_tmpContents[0][i] == Jieba_dataWANT[0][j] & Jieba_dataWANT[0][j]!=' '):
                 result = result+1
     if (result>0):
-        return check_keyword(Jieba_tmpArticle, Jieba_tmpContents)
+        return True
     else:
         return False
 
