@@ -19,17 +19,37 @@
         })
         .then(function(json) {
             if (json) {
-                let tableStr = "<table border=1><tr><td>";
-                tableStr += "title</td><td>";
-                tableStr += "content</td><td>";
-                tableStr += "floor</td><td>";
-                tableStr += "comment</td></tr>";
-                for (let row of json) {
-                    tableStr += "<tr><td>" + row['title'];
-                    tableStr += "</td><td>" + row['content'];
-                    tableStr += "</td><td>" + row['floor'];
-                    tableStr += "</td><td>" + row['comment'];
-                    tableStr += "</td></tr>";
+                let colArr = [];
+                let num = 1;
+                for (let i=1; i < json.length; i++) {
+                    if (json[i]['aid'] != json[i-1]['aid']) {
+                        colArr.push(num);
+                        num = 1;
+                    } else {
+                        num += 1;
+                        if (i == json.length-1) {
+                            colArr.push(num)
+                        }
+                    }
+                }
+                let tableStr = "<table border=1><tr><th>";
+                tableStr += "title</th><th>";
+                tableStr += "content</th><th>";
+                tableStr += "floor</th><th>";
+                tableStr += "comment</th></tr>";
+                var index = 0;
+                for (let i=0; i < colArr.length; i++) {
+                    tableStr += "<tr><td rowspan=" + colArr[i] + ">" + json[index]['title'];
+                    tableStr += "</td><td rowspan=" + colArr[i] + ">" + json[index]['content'];
+                    tableStr += "</td><td>" + json[index]['floor'];
+                    tableStr += "</td><td>" + json[index]['content'] + "</td></tr>";
+                    index += 1;
+                    temp = index;
+                    for (let j=temp; j < temp+colArr[i]-1; j++) {
+                        tableStr += "<tr><td>" + json[j]['floor'];
+                        tableStr += "</td><td>" + json[j]['comment'] + "</td></tr>";
+                        index += 1;
+                    }
                 }
                 tableStr += "</table>";
                 document.getElementById("main").innerHTML = tableStr;
