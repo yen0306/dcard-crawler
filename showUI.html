@@ -7,6 +7,12 @@
 <title>搜尋結果</title>
 </head>
 
+<style type="text/css">
+.content {
+    width: 55%;
+}
+</style>
+
 <script>
     var main;
     window.onload =function() {
@@ -19,7 +25,7 @@
         })
         .then(function(json) {
             if (json) {
-                let colArr = [];
+                let colArr = [];  //記錄每篇文章有幾筆留言
                 let num = 1;
                 for (let i=1; i < json.length; i++) {
                     if (json[i]['aid'] != json[i-1]['aid']) {
@@ -40,9 +46,9 @@
                 var index = 0;
                 for (let i=0; i < colArr.length; i++) {
                     tableStr += "<tr><td rowspan=" + colArr[i] + ">" + json[index]['title'];
-                    tableStr += "</td><td rowspan=" + colArr[i] + ">" + json[index]['content'];
+                    tableStr += "</td><td rowspan=" + colArr[i] + " class='content'>" + json[index]['content'];
                     tableStr += "</td><td>" + json[index]['floor'];
-                    tableStr += "</td><td>" + json[index]['content'] + "</td></tr>";
+                    tableStr += "</td><td>" + json[index]['comment'] + "</td></tr>";
                     index += 1;
                     temp = index;
                     for (let j=temp; j < temp+colArr[i]-1; j++) {
