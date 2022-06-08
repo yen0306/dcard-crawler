@@ -5,7 +5,7 @@
 pip install pymysql
 ```
 ```shell=
-
+pip install selenium
 ```
 ## files
 - crawler.py:
