@@ -15,7 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 db = pymysql.connect(host='localhost', user='root', passwd='tommy031103', db='test')
 cursor = db.cursor()
 
-def 0crawler(courseName):
+def crawler(courseName):
     #填入課程名稱
     sql = "insert into course (courseName) values ('%s')" % (courseName)
     cursor.execute(sql)
