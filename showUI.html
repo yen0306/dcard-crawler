@@ -8,9 +8,32 @@
 </head>
 
 <style type="text/css">
-.content {
+
+body {background-color: #FFFFFF}/*網頁背景*/
+
+
+.content { /*文章內容*/
     width: 55%;
 }
+
+tr{
+    background-color: #023E8A;
+    border:#669BBC 0;
+    font-family: "HGMaruGothicMPRO";
+    font-size: 20px;
+    color:#FFFFFF
+}
+
+td{
+    background-color: #FFFFFF;
+    border: #023E8A 1px;
+    border-style:solid;
+    font-family: "Microsoft YaHei";
+    font-size: 18px;
+    font-weight: normal;
+    color:black
+}
+
 </style>
 
 <script>
@@ -39,10 +62,10 @@
                     }
                 }
                 let tableStr = "<table border=1><tr><th>";
-                tableStr += "title</th><th>";
-                tableStr += "content</th><th>";
-                tableStr += "floor</th><th>";
-                tableStr += "comment</th></tr>";
+                tableStr += "文章標題</th><th>";
+                tableStr += "文章內容</th><th>";
+                tableStr += "樓層</th><th>";
+                tableStr += "留言內容</th></tr>";
                 var index = 0;
                 for (let i=0; i < colArr.length; i++) {
                     tableStr += "<tr><td rowspan=" + colArr[i] + ">" + json[index]['title'];
@@ -66,5 +89,6 @@
 
 <body>
 <div id="main"></div>
+
 </body>
 </html>
