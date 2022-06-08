@@ -7,11 +7,78 @@
 <title>搜尋</title>
 </head>
 <body>
+<style type="text/css">
+    body {background-color:#FFFFFF;}/*網頁背景*/
 
+    .background-image_container{
+    height: 300px;
+    width: 1000px;
+    background-size: 100%;
+    }
+
+    div {
+        background-color: #023E8A;
+    }
+
+    #course{
+        text-align: center;
+        position: absolute;
+        /*top: 50%;*/
+        left: 37.5%;
+        margin: auto;
+    }
+    input#courseName{
+        background-color: #FFFFFF; /* 搜尋框背景色 */
+        border-color:#000000; /* 邊框顏色 */
+        color: #FFFFFF; /*輸入游標顏色*/
+        padding: 15px 32px; /*邊框大小*/
+        text-align: left; /* 文字對齊位置 */
+        font-size: 16px;
+        font-family: "Microsoft YaHei";
+    }
+    input#submit{
+        background-color: #FFFFFF; /*搜尋框背景色*/
+        border-color:#03071e; /*搜尋框顏色*/
+        color: #000000; /*輸入時顏色*/
+        padding: 10px 15px 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight:bold;
+        font-family: "Microsoft YaHei";
+    }
+
+    h1{
+        color: #FFFFFF;
+        /*font-weight:bold;*/
+        font-family: "Microsoft YaHei";
+    }
+
+    h2{
+        color: #FFFFFF;
+        /*font-weight:bold;*/
+        font-family:"Microsoft YaHei";
+    }
+
+
+</style>
+<div id="course">
+<h1>請輸入課程名稱</h1>
+<h2>Please enter the course name</h2>
 <form method="post" id="form" action="control.php?act=check">
     <input id="courseName" type="text" name="courseName">
     <input type="submit" value="搜尋" id="submit">
 </form>
+</div>
+
+<div id="decoration">
+    <div class="background-image_container">
+    </div>
+</div>
+
+<!--<img id="dcard" src="book.png" alt="dcard" /></div>-->
+
+<img src="book.png" style="position:absolute;top:481px;left:1400px;">
+<img src="bottom.png" style="position:absolute;top:778px;right:0px;height:50px;width:1920px">
 
 </body>
 </html>
