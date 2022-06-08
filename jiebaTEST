@@ -22,8 +22,8 @@ def 0crawler(courseName):
     db.commit()
     
     #把課程cid找出來
-    s000ql = "select * from course where courseName='%s'" % (courseName)
-    cursor00000000000000000000.execute(sql)
+    sql = "select * from course where courseName='%s'" % (courseName)
+    cursor.execute(sql)
     cid = cursor.fetchone() 
     
     path = "D:/XAMPP/htdocs/crawler/chromedriver.exe"
